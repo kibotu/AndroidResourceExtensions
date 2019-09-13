@@ -44,8 +44,14 @@ val Float.dp: Float get() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DI
  */
 val Float.px: Float get() = this / Resources.getSystem().displayMetrics.density
 
+/**
+ * Converts dp to pixel.
+ */
 val Int.dp: Int get() = toFloat().dp.toInt()
 
+/**
+ * Converts pixel to dp.
+ */
 val Int.px: Int get() = toFloat().px.toInt()
 
 val Int.sp: Float
@@ -58,16 +64,146 @@ var TextView.sp: Float
     set(value) = setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
     get() = textSize.sp
 
-val Int.resBoolean: Boolean
+
+
+
+
+
+
+
+
+val @receiver:AnimatorRes Int.resAnimator: Boolean
     get() = application!!.resources.getBoolean(this)
 
-val Int.resInt: Int
+
+val @receiver:AnimRes Int.resAnim: Boolean
+    get() = application!!.resources.getBoolean(this)
+
+
+//val @receiver:AnyRes Int.resAny: Boolean
+//    get() = application!!.resources.getBoolean(this)
+
+
+//val @receiver:ArrayRes Int.resArray: Boolean
+//    get() = application!!.resources.getBoolean(this)
+
+
+val @receiver:AttrRes Int.resAttr: Boolean
+    get() = application!!.resources.getBoolean(this)
+
+
+val @receiver:BoolRes Int.resBoolean: Boolean
+    get() = application!!.resources.getBoolean(this)
+
+
+val @receiver:ColorInt Int.resBoolean: Boolean
+    get() = application!!.resources.getBoolean(this)
+
+
+val @receiver:ColorLong Int.resBoolean: Boolean
+    get() = application!!.resources.getBoolean(this)
+
+
+val @receiver:ColorRes Int.resBoolean: Boolean
+    get() = application!!.resources.getBoolean(this)
+
+
+val @receiver:DimenRes Int.resBoolean: Boolean
+    get() = application!!.resources.getBoolean(this)
+
+
+val @receiver:Dimension Int.resBoolean: Boolean
+    get() = application!!.resources.getBoolean(this)
+
+
+val @receiver:DrawableRes Int.resBoolean: Boolean
+    get() = application!!.resources.getBoolean(this)
+
+
+val @receiver:FontRes Int.resBoolean: Boolean
+    get() = application!!.resources.getBoolean(this)
+
+
+val @receiver:FractionRes Int.resBoolean: Boolean
+    get() = application!!.resources.getBoolean(this)
+
+
+val @receiver:IdRes Int.resBoolean: Boolean
+    get() = application!!.resources.getBoolean(this)
+
+
+val @receiver:IntegerRes Int.resBoolean: Boolean
+    get() = application!!.resources.getBoolean(this)
+
+
+val @receiver:InterpolatorRes Int.resBoolean: Boolean
+    get() = application!!.resources.getBoolean(this)
+
+
+val @receiver:LayoutRes Int.resBoolean: Boolean
+    get() = application!!.resources.getBoolean(this)
+
+
+val @receiver:BoolRes Int.resBoolean: Boolean
+    get() = application!!.resources.getBoolean(this)
+
+
+val @receiver:NavigationRes Int.resBoolean: Boolean
+    get() = application!!.resources.getBoolean(this)
+
+
+val @receiver:PluralsRes Int.resBoolean: Boolean
+    get() = application!!.resources.getBoolean(this)
+
+
+val @receiver:RawRes Int.resBoolean: Boolean
+    get() = application!!.resources.getBoolean(this)
+
+
+val @receiver:StringRes Int.resBoolean: Boolean
+    get() = application!!.resources.getBoolean(this)
+
+
+val @receiver:StyleableRes Int.resBoolean: Boolean
+    get() = application!!.resources.getBoolean(this)
+
+
+val @receiver:StyleRes Int.resBoolean: Boolean
+    get() = application!!.resources.getBoolean(this)
+
+
+val @receiver:TransitionRes Int.resBoolean: Boolean
+    get() = application!!.resources.getBoolean(this)
+
+
+val @receiver:XmlRes Int.resBoolean: Boolean
+    get() = application!!.resources.getBoolean(this)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+val @receiver:BoolRes Int.resBoolean: Boolean
+    get() = application!!.resources.getBoolean(this)
+
+val @receiver:IntegerRes Int.resInt: Int
     get() = application!!.resources.getInteger(this)
 
-val Int.resLong: Long
+val @receiver:IntegerRes Int.resLong: Long
     get() = application!!.resources!!.getInteger(this).toLong()
 
-val Int.resDimension: Float
+val @receiver:DimenRes Int.resDimension: Float
     get() = application!!.resources!!.getDimension(this)
 
 val Int.resString: String
