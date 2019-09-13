@@ -1,3 +1,5 @@
+@file:JvmName("ResourceExtensions")
+
 package net.kibotu.resourceextension
 
 
