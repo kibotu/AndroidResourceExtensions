@@ -37,16 +37,16 @@ import java.util.*
 /**
  * Converts dp to pixel.
  */
-val Float.px: Float get() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this, application!!.resources.displayMetrics)
+val Float.dp: Float get() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this, application!!.resources.displayMetrics)
 
 /**
  * Converts pixel to dp.
  */
-val Float.dp: Float get() = this / Resources.getSystem().displayMetrics.density
-
-val Int.px: Int get() = toFloat().px.toInt()
+val Float.px: Float get() = this / Resources.getSystem().displayMetrics.density
 
 val Int.dp: Int get() = toFloat().dp.toInt()
+
+val Int.px: Int get() = toFloat().px.toInt()
 
 val Int.sp: Float
     get() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, this.toFloat(), application!!.resources.displayMetrics)
