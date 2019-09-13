@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="arrow_rotation">0</integer>
+    <integer name="scale">1</integer>
+    <integer name="scale_inverse">-1</integer>
+    <bool name="rtl">false</bool>
+</resources>

@@ -1,0 +1,6 @@
+<resources>
+    <bool name="rtl">true</bool>
+    <integer name="scale">-1</integer>
+    <integer name="scale_inverse">1</integer>
+    <integer name="arrow_rotation">180</integer>
+</resources>
