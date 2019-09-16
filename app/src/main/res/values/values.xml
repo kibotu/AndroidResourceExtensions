@@ -26,14 +26,12 @@
         <item quantity="other">%s Minutes</item>
     </plurals>
 
-
     <bool name="my_boolean">true</bool>
     <color name="my_color_long">#aaefefef</color>
     <color name="my_color">#aae33fef</color>
     <dimen name="my_dimension">16dp</dimen>
     <string name="my_csv" tools:ignore="MissingTranslation">lorem, ipsum, dolor</string>
     <string name="my_html" tools:ignore="MissingTranslation"><![CDATA[ <a href="https://www.google.com/">Google</a>]]></string>
-    <!--    <integer name="my_csv">12345</integer>-->
     <fraction name="my_fraction">5%</fraction>
 
     <integer-array name="my_int_array">

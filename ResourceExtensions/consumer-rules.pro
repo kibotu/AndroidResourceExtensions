@@ -1,1 +1,0 @@
--keep net.kibotu.resourceextension.** { *; }
