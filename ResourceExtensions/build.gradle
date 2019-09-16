@@ -1,6 +1,8 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.github.dcendents.android-maven'
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
@@ -23,6 +25,56 @@ android {
         }
     }
 
+    // region compile options
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    // endregion
+
+    // region compile options
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    // endregion
+
+    // region lint
+
+    lintOptions {
+        disable 'InvalidPackage'
+        abortOnError false        // true by default
+        checkAllWarnings false
+        checkReleaseBuilds false
+        ignoreWarnings true       // false by default
+        quiet true                // false by default
+        ignoreTestSources true
+        checkDependencies true
+        tasks.lint.enabled = false
+    }
+
+    // endregion
+
+    // region dex options
+
+    dexOptions {
+        javaMaxHeapSize "4g"
+        maxProcessCount 8
+    }
+
+    // endregion
+
+    // region exclude duplicated meta inf files
+
+    packagingOptions {
+        exclude 'META-INF/library-core_release.kotlin_module'
+        exclude 'META-INF/lib_release.kotlin_module'
+    }
+
+    // endregion
 }
 
 dependencies {
@@ -33,4 +85,10 @@ dependencies {
     implementation 'androidx.annotation:annotation:1.1.0'
 
     compileOnly "com.github.florent37:applicationprovider:1.0.0"
+}
+
+apply from: "${project.rootDir}/javadoc.gradle"
+
+if (project.rootProject.file('bintray.properties').exists()) {
+    apply from: "https://raw.githubusercontent.com/exozet/Android-Dependencies/master/bintray.gradle"
 }

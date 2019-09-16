@@ -21,6 +21,23 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    // region compile options
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    // endregion
+
+    // region compile options
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    // endregion
 }
 
 dependencies {
