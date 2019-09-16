@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <integer name="my_integer">12345</integer>
+    <integer name="my_long">12345</integer>
+    <string name="my_string" tools:ignore="MissingTranslation">lorem ipsum</string>
+    <string name="my_string_args" tools:ignore="MissingTranslation">lorem %s</string>
+    <string name="my_string_args_float" tools:ignore="MissingTranslation">lorem %.2f</string>
+    <string name="my_localized_string">default</string>
+
+    <plurals name="my_quantityString">
+        <item quantity="zero">Minutes</item>
+        <item quantity="one">Minute</item>
+        <item quantity="two">Minutes</item>
+        <item quantity="few">Minutes</item>
+        <item quantity="many">Minutes</item>
+        <item quantity="other">Minutes</item>
+    </plurals>
+
+    <plurals name="my_quantityString_args">
+        <item quantity="zero">%s Minutes</item>
+        <item quantity="one">%s Minute</item>
+        <item quantity="two">%s Minutes</item>
+        <item quantity="few">%s Minutes</item>
+        <item quantity="many">%s Minutes</item>
+        <item quantity="other">%s Minutes</item>
+    </plurals>
+
+
+    <bool name="my_boolean">true</bool>
+    <color name="my_color_long">#aaefefef</color>
+    <color name="my_color">#aae33fef</color>
+    <dimen name="my_dimension">16dp</dimen>
+    <string name="my_csv" tools:ignore="MissingTranslation">lorem, ipsum, dolor</string>
+    <string name="my_html" tools:ignore="MissingTranslation"><![CDATA[ <a href="https://www.google.com/">Google</a>]]></string>
+    <!--    <integer name="my_csv">12345</integer>-->
+    <fraction name="my_fraction">5%</fraction>
+
+    <integer-array name="my_int_array">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </integer-array>
+
+    <string-array name="my_string_array">
+        <item>aa</item>
+        <item>bb</item>
+        <item>cc</item>
+        <item>ee</item>
+        <item>ff</item>
+    </string-array>
+
+    <string-array name="my_character_array">
+        <item>a</item>
+        <item>b</item>
+        <item>c</item>
+        <item>e</item>
+        <item>f</item>
+    </string-array>
+
+    <integer-array name="my_icons">
+        <item>@android:drawable/ic_delete</item>
+        <item>@android:drawable/ic_menu_share</item>
+        <item>@android:drawable/ic_dialog_alert</item>
+        <item>@android:drawable/ic_btn_speak_now</item>
+        <item>@android:drawable/ic_notification_overlay</item>
+    </integer-array>
+
+    <integer-array name="my_colors">
+        <item>@color/colorPrimary</item>
+        <item>@color/colorAccent</item>
+        <item>@color/colorPrimaryDark</item>
+        <item>@color/my_color</item>
+        <item>@color/my_color_long</item>
+    </integer-array>
+
+    <integer name="my_id">12345</integer>
+    <integer name="my_res_name">12345</integer>
+    <integer name="my_res_type_name">12345</integer>
+    <integer name="my_res_package_name">12345</integer>
+    <string name="my_res_string_id" tools:ignore="MissingTranslation">12345</string>
+
+</resources>

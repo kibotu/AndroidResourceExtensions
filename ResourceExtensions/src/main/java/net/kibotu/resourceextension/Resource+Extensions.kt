@@ -9,23 +9,34 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
+import android.content.res.XmlResourceParser
+import android.graphics.Typeface
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.os.Build
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.JELLY_BEAN_MR1
 import android.os.Build.VERSION_CODES.N
 import android.text.Html
 import android.text.Spanned
+import android.transition.Transition
+import android.transition.TransitionInflater
 import android.util.TypedValue
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.ViewParent
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
+import android.view.animation.Interpolator
+import android.view.animation.LayoutAnimationController
 import android.widget.TextView
 import androidx.annotation.*
-import androidx.annotation.IntRange
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.use
 import com.github.florent37.application.provider.application
 import java.io.ByteArrayOutputStream
+import java.io.InputStream
 import java.util.*
 
 
@@ -33,6 +44,224 @@ import java.util.*
  * Created by [Jan Rabe](https://about.me/janrabe).
  */
 
+
+// region Values
+
+val @receiver:BoolRes Int.resBoolean: Boolean
+    get() = application!!.resources.getBoolean(this)
+
+
+val @receiver:IntegerRes Int.resInt: Int
+    get() = application!!.resources.getInteger(this)
+
+val @receiver:IntegerRes Int.resLong: Long
+    get() = this.resInt.toLong()
+
+val @receiver:StringRes Int.resString: String
+    get() = application!!.resources.getString(this)
+
+inline fun <reified T> Int.resString(vararg formatArgs: T): String = application!!.resources!!.getString(this, *formatArgs)
+
+/**
+ * https://stackoverflow.com/a/9475663/1006741
+ *
+ * @param id     string resource id
+ * @param locale locale
+ * @return localized string
+ */
+fun @receiver:StringRes Int.localizedString(locale: Locale = Locale.UK): String {
+
+    if (SDK_INT > JELLY_BEAN_MR1) {
+        return localizedResources(application!!, locale).getString(this)
+    }
+
+    val res = application!!.resources
+    val conf = res.configuration
+    val savedLocale = conf.locale
+    conf.locale = locale // whatever you want here
+    res.updateConfiguration(conf, null) // second arg null means don't change
+
+    // retrieve resources from desired locale
+    val text = res.getString(this)
+
+    // restore original locale
+    conf.locale = savedLocale
+    res.updateConfiguration(conf, null)
+
+    return text
+}
+
+fun @receiver:PluralsRes Int.quantityString(amount: Int): String = application!!.resources.getQuantityString(this, amount)
+
+inline fun <reified T> @receiver:PluralsRes Int.quantityString(amount: Int, vararg formatArgs: T): String = application!!.resources.getQuantityString(this, amount, *formatArgs)
+
+@RequiresApi(api = JELLY_BEAN_MR1)
+fun localizedResources(context: Context = application!!, desiredLocale: Locale = Locale.UK): Resources {
+    var conf = context.resources.configuration
+    conf = Configuration(conf)
+    conf.setLocale(desiredLocale)
+    val localizedContext = context.createConfigurationContext(conf)
+    return localizedContext.resources
+}
+
+
+@get:ColorInt
+val @receiver:ColorRes Int.resColor: Int
+    get() = ContextCompat.getColor(application!!, this)
+
+@get:ColorLong
+val @receiver:ColorRes Int.resColorLong: Long
+    get() = ContextCompat.getColor(application!!, this).toLong()
+
+@get:Dimension
+val @receiver:DimenRes Int.resDimension: Float
+    get() = application!!.resources.getDimension(this)
+
+fun @receiver:FractionRes Int.resFraction(base: Int, pbase: Int): Float = application!!.resources.getFraction(this, base, pbase)
+
+val @receiver:StringRes Int.html: Spanned
+    get() = resString.html
+
+val String.html: Spanned
+    get() = if (SDK_INT >= N) {
+        Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY)
+    } else {
+        @Suppress("DEPRECATION")
+        Html.fromHtml(this)
+    }
+
+val @receiver:StringRes Int.csv: List<String>
+    get() = resString.split(",").map(String::trim)
+
+val @receiver:XmlRes Int.resXml: XmlResourceParser
+    get() = application!!.resources.getXml(this)
+
+// endregion
+
+// region Arrays
+
+val @receiver:ArrayRes Int.resIntArray: IntArray
+    get() = application!!.resources!!.getIntArray(this)
+
+val @receiver:ArrayRes Int.resStringArray: Array<String>
+    get() = application!!.resources!!.getStringArray(this)
+
+val @receiver:ArrayRes Int.resTextArray: Array<CharSequence>
+    get() = application!!.resources!!.getTextArray(this)
+
+/**
+ * Returns -1 if not found
+ */
+@get:ColorRes
+val @receiver:ColorRes Int.resColorArray: List<Int>
+    @SuppressLint("Recycle")
+    get() = application!!.resources.obtainTypedArray(this).use { array ->
+        (0 until array.length()).map { array.getResourceId(it, -1) }
+    }
+
+@get:ColorInt
+val @receiver:ArrayRes Int.resColorIntArray: List<Int>
+    get() = resColorArray.map { it.resColor }
+/**
+ * Returns -1 if not found
+ */
+@get:DrawableRes
+val @receiver:ArrayRes Int.resDrawableIdArray: List<Int>
+    @SuppressLint("Recycle")
+    get() = application!!.resources.obtainTypedArray(this).use { array ->
+        (0 until array.length()).map { array.getResourceId(it, -1) }
+    }
+
+val @receiver:ArrayRes Int.resDrawableArray: List<Drawable>
+    @SuppressLint("Recycle")
+    get() = resDrawableIdArray.map { it.resDrawable }
+
+// endregion
+
+// region Ids
+
+/**
+ * Returns -1 if not found
+ */
+@get:IdRes
+val String.resId: Int
+    get() = application!!.resources.getIdentifier(this, "id", application!!.packageName)
+
+val @receiver:AnyRes Int.resName: String
+    get() = application!!.resources.getResourceEntryName(this)
+
+val @receiver:AnyRes Int.resTypeName: String
+    get() = application!!.resources.getResourceTypeName(this)
+
+val @receiver:AnyRes Int.resPackageName: String
+    get() = application!!.resources.getResourcePackageName(this)
+
+@StringRes
+fun String.resStringId(onError: ((Exception) -> Unit)? = null): Int {
+    try {
+        return application!!.resources.getIdentifier(this, "string", application!!.packageName)
+    } catch (e: Exception) {
+        onError?.invoke(e)
+    }
+    return 0
+}
+
+@get:DrawableRes
+val String.resDrawableId: Int
+    get() = application!!.resources.getIdentifier(this, "drawable", application!!.packageName)
+
+@DrawableRes
+fun String.resDrawableId(onError: ((Exception) -> Unit)? = null): Int {
+    try {
+        return application!!.resources.getIdentifier(this, "drawable", application!!.packageName)
+    } catch (e: Exception) {
+        onError?.invoke(e)
+    }
+    return 0
+}
+
+// endregion
+
+// region Objects
+
+val @receiver:DrawableRes Int.resDrawable: Drawable
+    get() = ContextCompat.getDrawable(application!!, this)!!
+
+val @receiver:AnimatorRes Int.resAnim: Animation
+    get() = AnimationUtils.loadAnimation(application!!, this)
+
+val @receiver:AnimRes Int.resAnimator: Animator
+    get() = AnimatorInflater.loadAnimator(application!!, this)
+
+val @receiver:FontRes Int.resFont: Typeface
+    @RequiresApi(Build.VERSION_CODES.O)
+    get() = application!!.resources.getFont(this)
+
+val @receiver:RawRes Int.resRaw: InputStream
+    get() = application!!.resources.openRawResource(this)
+
+val @receiver:InterpolatorRes Int.resInterpolator: Interpolator
+    get() = AnimationUtils.loadInterpolator(application!!, this)
+
+val @receiver:AnimRes Int.resLayoutAnimation: LayoutAnimationController
+    get() = AnimationUtils.loadLayoutAnimation(application!!, this)
+
+val @receiver:TransitionRes Int.resTransition: Transition
+    @RequiresApi(Build.VERSION_CODES.KITKAT)
+    get() = TransitionInflater.from(application!!).inflateTransition(this)
+
+// endregion
+
+// region Layout
+
+val @receiver:LayoutRes Int.resLayout: XmlResourceParser
+    get() = application!!.resources.getLayout(this)
+
+fun @receiver:LayoutRes Int.inflate(parent: ViewParent?, attachToRoot: Boolean = false): View = LayoutInflater.from((parent as ViewGroup).context).inflate(this, parent, attachToRoot)
+
+// endregion
+
+// region Screen
 
 /**
  * Converts dp to pixel.
@@ -64,277 +293,21 @@ var TextView.sp: Float
     set(value) = setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
     get() = textSize.sp
 
-
-
-
-
-
-
-
-
-val @receiver:AnimatorRes Int.resAnimator: Boolean
-    get() = application!!.resources.getBoolean(this)
-
-
-val @receiver:AnimRes Int.resAnim: Boolean
-    get() = application!!.resources.getBoolean(this)
-
-
-//val @receiver:AnyRes Int.resAny: Boolean
-//    get() = application!!.resources.getBoolean(this)
-
-
-//val @receiver:ArrayRes Int.resArray: Boolean
-//    get() = application!!.resources.getBoolean(this)
-
-
-val @receiver:AttrRes Int.resAttr: Boolean
-    get() = application!!.resources.getBoolean(this)
-
-
-val @receiver:BoolRes Int.resBoolean: Boolean
-    get() = application!!.resources.getBoolean(this)
-
-
-val @receiver:ColorInt Int.resBoolean: Boolean
-    get() = application!!.resources.getBoolean(this)
-
-
-val @receiver:ColorLong Int.resBoolean: Boolean
-    get() = application!!.resources.getBoolean(this)
-
-
-val @receiver:ColorRes Int.resBoolean: Boolean
-    get() = application!!.resources.getBoolean(this)
-
-
-val @receiver:DimenRes Int.resBoolean: Boolean
-    get() = application!!.resources.getBoolean(this)
-
-
-val @receiver:Dimension Int.resBoolean: Boolean
-    get() = application!!.resources.getBoolean(this)
-
-
-val @receiver:DrawableRes Int.resBoolean: Boolean
-    get() = application!!.resources.getBoolean(this)
-
-
-val @receiver:FontRes Int.resBoolean: Boolean
-    get() = application!!.resources.getBoolean(this)
-
-
-val @receiver:FractionRes Int.resBoolean: Boolean
-    get() = application!!.resources.getBoolean(this)
-
-
-val @receiver:IdRes Int.resBoolean: Boolean
-    get() = application!!.resources.getBoolean(this)
-
-
-val @receiver:IntegerRes Int.resBoolean: Boolean
-    get() = application!!.resources.getBoolean(this)
-
-
-val @receiver:InterpolatorRes Int.resBoolean: Boolean
-    get() = application!!.resources.getBoolean(this)
-
-
-val @receiver:LayoutRes Int.resBoolean: Boolean
-    get() = application!!.resources.getBoolean(this)
-
-
-val @receiver:BoolRes Int.resBoolean: Boolean
-    get() = application!!.resources.getBoolean(this)
-
-
-val @receiver:NavigationRes Int.resBoolean: Boolean
-    get() = application!!.resources.getBoolean(this)
-
-
-val @receiver:PluralsRes Int.resBoolean: Boolean
-    get() = application!!.resources.getBoolean(this)
-
-
-val @receiver:RawRes Int.resBoolean: Boolean
-    get() = application!!.resources.getBoolean(this)
-
-
-val @receiver:StringRes Int.resBoolean: Boolean
-    get() = application!!.resources.getBoolean(this)
-
-
-val @receiver:StyleableRes Int.resBoolean: Boolean
-    get() = application!!.resources.getBoolean(this)
-
-
-val @receiver:StyleRes Int.resBoolean: Boolean
-    get() = application!!.resources.getBoolean(this)
-
-
-val @receiver:TransitionRes Int.resBoolean: Boolean
-    get() = application!!.resources.getBoolean(this)
-
-
-val @receiver:XmlRes Int.resBoolean: Boolean
-    get() = application!!.resources.getBoolean(this)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-val @receiver:BoolRes Int.resBoolean: Boolean
-    get() = application!!.resources.getBoolean(this)
-
-val @receiver:IntegerRes Int.resInt: Int
-    get() = application!!.resources.getInteger(this)
-
-val @receiver:IntegerRes Int.resLong: Long
-    get() = application!!.resources!!.getInteger(this).toLong()
-
-val @receiver:DimenRes Int.resDimension: Float
-    get() = application!!.resources!!.getDimension(this)
-
-val Int.resString: String
-    get() = application!!.resources!!.getString(this)
-
-inline fun <reified T> Int.resString(formatArg: T): String = application!!.resources!!.getString(this, formatArg)
-
-val Int.resColor: Int
-    get() = ContextCompat.getColor(application!!, this)
-
-val Int.html: Spanned
-    get() = resString.html
-
-val String.html: Spanned
-    get() = if (SDK_INT >= N) {
-        Html.fromHtml(this, Html.FROM_HTML_MODE_LEGACY)
-    } else {
-        @Suppress("DEPRECATION")
-        Html.fromHtml(this)
-    }
-
-val Int.resAnim: Animation
-    get() = AnimationUtils.loadAnimation(application!!, this)
-
-val Int.resAnimator: Animator
-    get() = AnimatorInflater.loadAnimator(application!!, this)
-
-val Int.resName: String
-    get() = application!!.resources.getResourceEntryName(this)
-
-val String.resId: Int
-    get() = application!!.resources.getIdentifier(this, "id", application!!.packageName)
-
-val Int.resDrawable: Drawable
-    get() = ContextCompat.getDrawable(application!!, this)!!
-
-val String.resDrawableId: Int
-    get() = application!!.resources.getIdentifier(this, "drawable", application!!.packageName)
-
-val Int.resStringArray: Array<String>
-    get() = application!!.resources!!.getStringArray(this)
-
-val Int.resIntArray: IntArray
-    get() = application!!.resources!!.getIntArray(this)
-
-val Int.resTextArray: Array<CharSequence>
-    get() = application!!.resources!!.getTextArray(this)
-
-fun Int.asCsv(context: Context = application!!): List<String> = context.resources.getString(this).split(",").map(String::trim).toList()
-
-/**
- * Returns -1 if not found
- */
-@ColorRes
-fun @receiver:ColorRes Int.resColorArray(@IntRange(from = 0) index: Int): Int {
-    val array = application!!.resources.obtainTypedArray(this)
-    val resourceId = array.getResourceId(index, -1)
-    array.recycle()
-    return resourceId
-}
-
-/**
- * Returns -1 if not found
- */
-val @receiver:DrawableRes Int.resDrawableArray: List<Int>
-    @SuppressLint("Recycle")
-    get() = application!!.resources.obtainTypedArray(this).use { array ->
-        (0 until array.length()).map { array.getResourceId(it, -1) }
-    }
-
-/**
- * Returns -1 if not found
- */
-val @receiver:ColorRes Int.resColorArray: List<Int>
-    @SuppressLint("Recycle")
-    get() = application!!.resources.obtainTypedArray(this).use { array ->
-        (0 until array.length()).map { array.getResourceId(it, -1) }
-    }
-
-/**
- * Returns -1 if not found
- */
-fun Int.resDrawableArray(@IntRange(from = 0) index: Int): Int {
-    val array = application!!.resources.obtainTypedArray(this)
-    val resourceId = array.getResourceId(index, -1)
-    array.recycle()
-    return resourceId
-}
-
-val screenWidthtDp
+val screenWidthDp: Int
     get() = Resources.getSystem().configuration.screenWidthDp
 
-val screenHeightDp
+val screenHeightDp: Int
     get() = Resources.getSystem().configuration.screenHeightDp
 
-val screenWidthPixels
+val screenWidthPixels: Int
     get() = Resources.getSystem().displayMetrics.widthPixels
 
-val screenHeightPixels
+val screenHeightPixels: Int
     get() = Resources.getSystem().displayMetrics.heightPixels
 
-fun isRightToLeft(): Boolean = R.bool.rtl.resBoolean
+// endregion
 
-inline fun <reified T> Int.times(factory: () -> T) = arrayListOf<T>().apply { for (i in 0..this@times) add(factory()) }
-
-@StringRes
-fun String.fromStringResource(onError: ((Exception) -> Unit)? = null): Int {
-    try {
-        return application!!.resources.getIdentifier(this, "string", application!!.packageName)
-    } catch (e: Exception) {
-        onError?.invoke(e)
-    }
-    return 0
-}
-
-fun String.stringFromAssets(): String? = try {
-    application!!.assets.open(this).bufferedReader().use { it.readText() }
-} catch (e: Exception) {
-    e.printStackTrace()
-    null
-}
-
-@DrawableRes
-fun String.fromDrawableResource(onError: ((Exception) -> Unit)? = null): Int {
-    try {
-        return application!!.resources.getIdentifier(this, "drawable", application!!.packageName)
-    } catch (e: Exception) {
-        onError?.invoke(e)
-    }
-    return 0
-}
+// region Assets
 
 private val BUFFER_SIZE by lazy { 16 * 1024 }
 
@@ -373,46 +346,24 @@ fun String.bytesFromAssets(context: Context? = application, onError: ((Exception
     null
 }
 
+fun String.stringFromAssets(): String? = try {
+    application!!.assets.open(this).bufferedReader().use { it.readText() }
+} catch (e: Exception) {
+    e.printStackTrace()
+    null
+}
+
+// endregion
+
+// region Misc
+
+val isRightToLeft: Boolean
+    get() = R.bool.rtl.resBoolean
+
 val Uri.isTelephoneLink: Boolean
     get() = toString().startsWith("tel:")
 
 val Uri.isMailToLink: Boolean
     get() = toString().startsWith("mailto:")
 
-/**
- * https://stackoverflow.com/a/9475663/1006741
- *
- * @param id     string resource id
- * @param locale locale
- * @return localized string
- */
-fun getLocalizedString(@StringRes id: Int, locale: Locale): String {
-
-    if (SDK_INT > JELLY_BEAN_MR1) {
-        return getLocalizedResources(application!!, locale).getString(id)
-    }
-
-    val res = application!!.resources
-    val conf = res.configuration
-    val savedLocale = conf.locale
-    conf.locale = locale // whatever you want here
-    res.updateConfiguration(conf, null) // second arg null means don't change
-
-    // retrieve resources from desired locale
-    val text = res.getString(id)
-
-    // restore original locale
-    conf.locale = savedLocale
-    res.updateConfiguration(conf, null)
-
-    return text
-}
-
-@RequiresApi(api = JELLY_BEAN_MR1)
-fun getLocalizedResources(context: Context, desiredLocale: Locale): Resources {
-    var conf = context.resources.configuration
-    conf = Configuration(conf)
-    conf.setLocale(desiredLocale)
-    val localizedContext = context.createConfigurationContext(conf)
-    return localizedContext.resources
-}
+// endregion

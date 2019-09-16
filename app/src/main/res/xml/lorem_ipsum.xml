@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<table xmlns="http://query.yahooapis.com/v1/schema/table.xsd" https="false">
+    <meta>
+        <author>Brian Cantoni</author>
+        <description>Generate random Lorem Ipsum text from lipsum.com. Parameters: amount=number of things to fetch; what: paras, words, bytes, or lists; start: set to "no" to not start all strings with Lorem Ipsum.</description>
+        <documentationURL>http://www.lipsum.com/</documentationURL>
+        <sampleQuery>select * from {table} where amount='5' and what='paras';</sampleQuery>
+    </meta>
+    <bindings>
+        <select itemPath="" produces="XML">
+            <urls>
+                <url></url>
+            </urls>
+            <inputs>
+                <key id="amount" type="xs:string" paramType="query" />
+                <key id="what" type="xs:string" paramType="query" />
+                <key id="start" type="xs:string" paramType="query" default="yes" />
+            </inputs>
+            <execute>
+                <![CDATA[
+                var q = y.query('select * from html where url="http://www.lipsum.com/feed/http?amount=' + amount + '&what=' + what + '&start=' + start + '" and xpath=\'//div[@id="lipsum"]//p\'');
+                if (q.results) {
+                    response.object = q.results;
+                }
+                ]]>
+            </execute>
+        </select>
+    </bindings>
+</table>
