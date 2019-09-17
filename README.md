@@ -5,7 +5,7 @@
 
 Convenience extension methods for android's auto-generated /res folder *R.* class.
 
-Basically everything in your res/ and /assets folder can be accessed via an extension function. Note: everything gets loaded with application context.
+Basically everything in your res/ and /assets folder can be accessed via an extension function. *Note: everything gets loaded with current activity context, if that is not available it uses application context.*
 
 ### Features:
 
