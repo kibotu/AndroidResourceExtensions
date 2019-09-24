@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
         val my_drawable: Drawable = R.drawable.ic_share.resDrawable
         val my_anim: Animation = R.anim.grow.resAnim
         val my_animator: Animator = R.animator.flip_animation.resAnimator
-        val my_font: Typeface = R.font.lato.resFont
+        val my_font: Typeface? = R.font.lato.resFont
         val my_raw: InputStream = R.raw.my_raw.resRaw
         val my_interpolator: Interpolator = android.R.interpolator.anticipate_overshoot.resInterpolator
         val my_res_layout_animation_controller: LayoutAnimationController = R.anim.layout_animation.resLayoutAnimation
