@@ -8,6 +8,7 @@ import android.animation.AnimatorInflater
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.ContextWrapper
+import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.content.res.XmlResourceParser
@@ -34,6 +35,7 @@ import android.view.animation.LayoutAnimationController
 import android.widget.TextView
 import androidx.annotation.*
 import androidx.core.content.ContextCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.content.res.use
 import com.github.florent37.application.provider.ActivityProvider.currentActivity
 import com.github.florent37.application.provider.application
@@ -115,6 +117,9 @@ fun localizedResources(context: Context = currentActivity ?: application!!, desi
     val localizedContext = context.createConfigurationContext(conf)
     return localizedContext.resources
 }
+
+val @receiver:ColorRes Int.resColorStateList: ColorStateList?
+    get() = ContextCompat.getColorStateList(context, this)
 
 @get:ColorInt
 val @receiver:ColorRes Int.resColor: Int
@@ -244,9 +249,9 @@ val @receiver:AnimatorRes Int.resAnim: Animation
 val @receiver:AnimRes Int.resAnimator: Animator
     get() = AnimatorInflater.loadAnimator(context, this)
 
-val @receiver:FontRes Int.resFont: Typeface
+val @receiver:FontRes Int.resFont: Typeface?
     @RequiresApi(Build.VERSION_CODES.O)
-    get() = context.resources.getFont(this)
+    get() = ResourcesCompat.getFont(context, this)
 
 val @receiver:RawRes Int.resRaw: InputStream
     get() = context.resources.openRawResource(this)
@@ -363,6 +368,8 @@ fun String.stringFromAssets(context: Context? = application): String? = try {
     e.printStackTrace()
     null
 }
+
+fun String.fontFromAssets(context: Context? = application) = Typeface.createFromAsset(context!!.assets, this)
 
 // endregion
 
