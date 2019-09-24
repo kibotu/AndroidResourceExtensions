@@ -279,6 +279,18 @@ fun @receiver:LayoutRes Int.inflate(parent: ViewParent?, attachToRoot: Boolean =
 
 // region Screen
 
+val Float.pt: Float get() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PT, this, context.resources.displayMetrics)
+
+val Int.pt: Int get() = toFloat().pt.toInt()
+
+val Float.inches: Float get() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_IN, this, context.resources.displayMetrics)
+
+val Int.inches: Int get() = toFloat().inches.toInt()
+
+val Float.mm: Float get() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, this, context.resources.displayMetrics)
+
+val Int.mm: Int get() = toFloat().mm.toInt()
+
 /**
  * Converts dp to pixel.
  */
@@ -287,7 +299,7 @@ val Float.dp: Float get() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DI
 /**
  * Converts pixel to dp.
  */
-val Float.px: Float get() = this / Resources.getSystem().displayMetrics.density
+val Float.px: Float get() = this / Resources.getSystem().displayMetrics.density // TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, this, context.resources.displayMetrics)
 
 /**
  * Converts dp to pixel.

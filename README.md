@@ -70,6 +70,9 @@ Basically everything in your res/ and /assets folder can be accessed via an exte
 - dp
 - px
 - sp
+- pt
+- inches
+- mm
 - screenWidthDp
 - screenHeightDp
 - screenWidthPixels
@@ -85,6 +88,11 @@ Basically everything in your res/ and /assets folder can be accessed via an exte
 - isRightToLeft
 - isTelephoneLink
 - isMailToLink
+
+
+### ManifestPermissions
+
+- isGranted // checks if granted, doesn't trigger request
 
 
 ### How to use
@@ -148,6 +156,9 @@ val my_dp_int: Int = 16.dp
 val my_px: Float = 200f.px
 val my_px_int: Int = 200.px
 val my_sp: Float = 14f.sp
+val my_pt: Float = 14f.pt
+val my_inches: Float = 14f.inches
+val my_mm: Float = 14f.mm
 val my_screen_width_dp: Int = screenWidthDp
 val my_screen_height_dp: Int = screenHeightDp
 val my_screen_width_pixels: Int = screenWidthPixels
@@ -157,6 +168,9 @@ val my_string_from_assets: String? = "my_text.json".stringFromAssets()
 val my_device_is_rtl: Boolean = isRightToLeft
 val my_string_is_a_telephone_link: Boolean = Uri.parse("""<a href="tel:491771789232">Google</a>""").isTelephoneLink
 val my_string_is_a_mailto_link: Boolean = Uri.parse("""<a href="mailto:cloudgazer3d@gmail.com">Google</a>""").isMailToLink
+
+val locationPermission : Boolean = Manifest.permission.ACCESS_FINE_LOCATION.isGranted
+
 ```
 
 ###  How to install
