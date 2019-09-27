@@ -181,20 +181,25 @@ Step 1. Add the JitPack repository to your build file
 
 Add it in your root build.gradle at the end of repositories:
 
-	allprojects {
-		repositories {
-			...
-			maven { url 'https://jitpack.io' }
-		}
+```groovy
+allprojects {
+	repositories {
+		...
+		maven { url 'https://jitpack.io' }
 	}
-Step 2. Add the dependency
+}
+``` 
 
-	dependencies {
-        implementation "com.github.florent37:applicationprovider:1.0.0"
-        implementation 'com.github.kibotu:AndroidResourceExtensions:{latest}'
-	}
+Step 2. Add the dependency
+```groovy
+dependencies {
+	implementation "com.github.florent37:applicationprovider:1.0.0"
+	implementation 'com.github.kibotu:AndroidResourceExtensions:{latest}'
+}
+```
 
 ### License
+
 <pre>
 Copyright 2019 Jan Rabe
 
