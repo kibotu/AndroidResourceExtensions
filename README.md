@@ -193,10 +193,18 @@ allprojects {
 Step 2. Add the dependency
 ```groovy
 dependencies {
-	implementation "com.github.florent37:applicationprovider:1.0.0"
-	implementation 'com.github.kibotu:AndroidResourceExtensions:{latest}'
+    implementation "com.github.florent37:applicationprovider:1.0.0"
+    implementation 'com.github.kibotu:AndroidResourceExtensions:{latest}'
 }
 ```
+
+### Notes
+
+Follow me on Twitter: [@wolkenschauer](https://twitter.com/wolkenschauer)
+
+Let me know what you think: [jan.rabe@kibotu.net](mailto:jan.rabe@kibotu.net)
+
+Contributions welcome!
 
 ### License
 
