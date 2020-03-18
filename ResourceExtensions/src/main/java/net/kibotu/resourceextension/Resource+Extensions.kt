@@ -13,7 +13,9 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.content.res.XmlResourceParser
 import android.graphics.Typeface
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.GradientDrawable
 import android.net.Uri
 import android.os.Build
 import android.os.Build.VERSION.SDK_INT
@@ -48,10 +50,8 @@ import java.util.*
  * Created by [Jan Rabe](https://about.me/janrabe).
  */
 
-var useCurrentActivityContext: Boolean = true
-
 internal inline val context: ContextWrapper
-    get() = if (useCurrentActivityContext) currentActivity ?: application!! else application!!
+    get() = currentActivity ?: application!!
 
 // region Values
 
@@ -60,7 +60,7 @@ val @receiver:BoolRes Int.resBoolean: Boolean
 
 
 val @receiver:IntegerRes Int.resInt: Int
-    get() = application!!.resources.getInteger(this)
+    get() = context.resources.getInteger(this)
 
 val @receiver:IntegerRes Int.resLong: Long
     get() = this.resInt.toLong()
@@ -69,8 +69,8 @@ val @receiver:StringRes Int.resString: String
     get() = context.resources.getString(this)
 
 inline fun <reified T> Int.resString(vararg formatArgs: T): String {
-    val context: ContextWrapper = if (useCurrentActivityContext) currentActivity ?: application!! else application!!
-    return context.resources!!.getString(this, *formatArgs)
+    val context: ContextWrapper = currentActivity ?: application!!
+    return context.resources.getString(this, *formatArgs)
 }
 
 /**
@@ -102,19 +102,26 @@ fun @receiver:StringRes Int.localizedString(locale: Locale = Locale.UK): String 
     return text
 }
 
-fun @receiver:PluralsRes Int.quantityString(amount: Int): String = application!!.resources.getQuantityString(this, amount)
+fun @receiver:PluralsRes Int.quantityString(amount: Int): String =
+    context.resources.getQuantityString(this, amount)
 
-inline fun <reified T> @receiver:PluralsRes Int.quantityString(amount: Int, vararg formatArgs: T): String {
-    val context: ContextWrapper = if (useCurrentActivityContext) currentActivity ?: application!! else application!!
+inline fun <reified T> @receiver:PluralsRes Int.quantityString(
+    amount: Int,
+    vararg formatArgs: T
+): String {
+    val context: ContextWrapper = currentActivity ?: application!!
     return context.resources.getQuantityString(this, amount, *formatArgs)
 }
 
 @RequiresApi(api = JELLY_BEAN_MR1)
-fun localizedResources(context: Context = currentActivity ?: application!!, desiredLocale: Locale = Locale.UK): Resources {
-    var conf = context.resources.configuration
+fun localizedResources(
+    ctx: Context = context,
+    desiredLocale: Locale = Locale.UK
+): Resources {
+    var conf = ctx.resources.configuration
     conf = Configuration(conf)
     conf.setLocale(desiredLocale)
-    val localizedContext = context.createConfigurationContext(conf)
+    val localizedContext = ctx.createConfigurationContext(conf)
     return localizedContext.resources
 }
 
@@ -133,7 +140,8 @@ val @receiver:ColorRes Int.resColorLong: Long
 val @receiver:DimenRes Int.resDimension: Float
     get() = context.resources.getDimension(this)
 
-fun @receiver:FractionRes Int.resFraction(base: Int, pbase: Int): Float = context.resources.getFraction(this, base, pbase)
+fun @receiver:FractionRes Int.resFraction(base: Int, pbase: Int): Float =
+    context.resources.getFraction(this, base, pbase)
 
 val @receiver:StringRes Int.html: Spanned
     get() = resString.html
@@ -157,13 +165,13 @@ val @receiver:XmlRes Int.resXml: XmlResourceParser
 // region Arrays
 
 val @receiver:ArrayRes Int.resIntArray: IntArray
-    get() = context.resources!!.getIntArray(this)
+    get() = context.resources.getIntArray(this)
 
 val @receiver:ArrayRes Int.resStringArray: Array<String>
-    get() = context.resources!!.getStringArray(this)
+    get() = context.resources.getStringArray(this)
 
 val @receiver:ArrayRes Int.resTextArray: Array<CharSequence>
-    get() = context.resources!!.getTextArray(this)
+    get() = context.resources.getTextArray(this)
 
 /**
  * Returns -1 if not found
@@ -178,6 +186,7 @@ val @receiver:ColorRes Int.resColorArray: List<Int>
 @get:ColorInt
 val @receiver:ArrayRes Int.resColorIntArray: List<Int>
     get() = resColorArray.map { it.resColor }
+
 /**
  * Returns -1 if not found
  */
@@ -243,6 +252,15 @@ fun String.resDrawableId(onError: ((Exception) -> Unit)? = null): Int {
 val @receiver:DrawableRes Int.resDrawable: Drawable
     get() = ContextCompat.getDrawable(context, this)!!
 
+val @receiver:ColorRes Int.resColorDrawable: ColorDrawable
+    get() = resColor.colorDrawable
+
+val @receiver:ColorRes Int.resGradientDrawable: GradientDrawable
+    get() = ContextCompat.getDrawable(context, this) as GradientDrawable
+
+val @receiver:ColorInt Int.colorDrawable
+    get() = ColorDrawable(this)
+
 val @receiver:AnimatorRes Int.resAnim: Animation
     get() = AnimationUtils.loadAnimation(context, this)
 
@@ -273,28 +291,49 @@ val @receiver:TransitionRes Int.resTransition: Transition
 val @receiver:LayoutRes Int.resLayout: XmlResourceParser
     get() = context.resources.getLayout(this)
 
-fun @receiver:LayoutRes Int.inflate(parent: ViewParent?, attachToRoot: Boolean = false): View = LayoutInflater.from((parent as ViewGroup).context).inflate(this, parent, attachToRoot)
+fun @receiver:LayoutRes Int.inflate(parent: ViewParent?, attachToRoot: Boolean = false): View =
+    LayoutInflater.from((parent as ViewGroup).context).inflate(this, parent, attachToRoot)
 
 // endregion
 
 // region Screen
 
-val Float.pt: Float get() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PT, this, context.resources.displayMetrics)
+val Float.pt: Float
+    get() = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_PT,
+        this,
+        context.resources.displayMetrics
+    )
 
 val Int.pt: Int get() = toFloat().pt.toInt()
 
-val Float.inches: Float get() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_IN, this, context.resources.displayMetrics)
+val Float.inches: Float
+    get() = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_IN,
+        this,
+        context.resources.displayMetrics
+    )
 
 val Int.inches: Int get() = toFloat().inches.toInt()
 
-val Float.mm: Float get() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_MM, this, context.resources.displayMetrics)
+val Float.mm: Float
+    get() = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_MM,
+        this,
+        context.resources.displayMetrics
+    )
 
 val Int.mm: Int get() = toFloat().mm.toInt()
 
 /**
  * Converts dp to pixel.
  */
-val Float.dp: Float get() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, this, context.resources.displayMetrics)
+val Float.dp: Float
+    get() = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP,
+        this,
+        context.resources.displayMetrics
+    )
 
 /**
  * Converts pixel to dp.
@@ -312,10 +351,18 @@ val Int.dp: Int get() = toFloat().dp.toInt()
 val Int.px: Int get() = toFloat().px.toInt()
 
 val Int.sp: Float
-    get() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, this.toFloat(), context.resources.displayMetrics)
+    get() = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_SP,
+        this.toFloat(),
+        context.resources.displayMetrics
+    )
 
 val Float.sp: Float
-    get() = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, this, context.resources.displayMetrics)
+    get() = TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_SP,
+        this,
+        context.resources.displayMetrics
+    )
 
 var TextView.sp: Float
     set(value) = setTextSize(TypedValue.COMPLEX_UNIT_SP, value)
@@ -344,9 +391,12 @@ private val copyBuffer by lazy { ThreadLocal<ByteArray>() }
 /**
  * Thread-Safe
  */
-fun String.bytesFromAssets(context: Context? = application, onError: ((Exception) -> Unit)? = null): ByteArray? = try {
+fun String.bytesFromAssets(
+    ctx: Context? = context,
+    onError: ((Exception) -> Unit)? = null
+): ByteArray? = try {
 
-    context?.assets?.open(this)?.use { inputStream ->
+    ctx?.assets?.open(this)?.use { inputStream ->
 
         ByteArrayOutputStream().use { buffer ->
 
@@ -374,14 +424,14 @@ fun String.bytesFromAssets(context: Context? = application, onError: ((Exception
     null
 }
 
-fun String.stringFromAssets(context: Context? = application): String? = try {
-    context?.assets?.open(this)?.bufferedReader()?.use { it.readText() }
+fun String.stringFromAssets(ctx: Context? = context): String? = try {
+    ctx!!.assets?.open(this)?.bufferedReader()?.use { it.readText() }
 } catch (e: Exception) {
     e.printStackTrace()
     null
 }
 
-fun String.fontFromAssets(context: Context? = application) = Typeface.createFromAsset(context!!.assets, this)
+fun String.fontFromAssets(ctx: Context? = context) = Typeface.createFromAsset(ctx!!.assets, this)
 
 // endregion
 
