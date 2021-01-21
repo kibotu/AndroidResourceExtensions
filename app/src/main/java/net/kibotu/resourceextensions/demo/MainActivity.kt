@@ -18,7 +18,6 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.IdRes
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_main.*
 import net.kibotu.resourceextension.*
 import java.io.InputStream
 import java.util.*
@@ -80,7 +79,7 @@ class MainActivity : AppCompatActivity() {
             val my_transition: Transition = android.R.transition.explode.resTransition
         }
         val my_layout: XmlResourceParser = R.layout.activity_main.resLayout
-        val my_inflated_layout: View = R.layout.activity_main.inflate(root)
+        val my_inflated_layout: View = R.layout.activity_main.inflate(findViewById(R.id.root))
         val my_dp: Float = 16f.dp
         val my_dp_int: Int = 16.dp
         val my_px: Float = 200f.px
@@ -94,6 +93,6 @@ class MainActivity : AppCompatActivity() {
         val my_string_from_assets: String? = "my_text.json".stringFromAssets()
         val my_device_is_rtl: Boolean = isRightToLeft
         val my_string_is_a_telephone_link: Boolean = Uri.parse("""<a href="tel:491771789232">Google</a>""").isTelephoneLink
-        val my_string_is_a_mailto_link: Boolean = Uri.parse("""<a href="mailto:cloudgazer3d@gmail.com">Google</a>""").isMailToLink
+        val my_string_is_a_mailto_link: Boolean = Uri.parse("""<a href="mailto:jan.rabe@kibotu.net">Google</a>""").isMailToLink
     }
 }
