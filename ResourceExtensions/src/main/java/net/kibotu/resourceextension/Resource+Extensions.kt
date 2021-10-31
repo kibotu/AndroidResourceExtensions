@@ -51,7 +51,7 @@ import java.util.*
  */
 
 internal inline val context: ContextWrapper
-    get() = currentActivity ?: application!!
+    get() = currentActivity ?: requireNotNull(application)
 
 // region Values
 
@@ -68,8 +68,8 @@ val @receiver:IntegerRes Int.resLong: Long
 val @receiver:StringRes Int.resString: String
     get() = context.resources.getString(this)
 
-inline fun <reified T> Int.resString(vararg formatArgs: T): String {
-    val context: ContextWrapper = currentActivity ?: application!!
+inline fun <reified T> @receiver:StringRes Int.resString(vararg formatArgs: T): String {
+    val context: ContextWrapper = currentActivity ?: requireNotNull(application)
     return context.resources.getString(this, *formatArgs)
 }
 
@@ -109,7 +109,7 @@ inline fun <reified T> @receiver:PluralsRes Int.quantityString(
     amount: Int,
     vararg formatArgs: T
 ): String {
-    val context: ContextWrapper = currentActivity ?: application!!
+    val context: ContextWrapper = currentActivity ?: requireNotNull(application)
     return context.resources.getQuantityString(this, amount, *formatArgs)
 }
 
@@ -250,7 +250,7 @@ fun String.resDrawableId(onError: ((Exception) -> Unit)? = null): Int {
 // region Objects
 
 val @receiver:DrawableRes Int.resDrawable: Drawable
-    get() = ContextCompat.getDrawable(context, this)!!
+    get() = requireNotNull(ContextCompat.getDrawable(context, this))
 
 val @receiver:ColorRes Int.resColorDrawable: ColorDrawable
     get() = resColor.colorDrawable
@@ -425,13 +425,13 @@ fun String.bytesFromAssets(
 }
 
 fun String.stringFromAssets(ctx: Context? = context): String? = try {
-    ctx!!.assets?.open(this)?.bufferedReader()?.use { it.readText() }
+    ctx?.assets?.open(this)?.bufferedReader()?.use { it.readText() }
 } catch (e: Exception) {
     e.printStackTrace()
     null
 }
 
-fun String.fontFromAssets(ctx: Context? = context) = Typeface.createFromAsset(ctx!!.assets, this)
+fun String.fontFromAssets(ctx: Context? = context) = Typeface.createFromAsset(requireNotNull(ctx).assets, this)
 
 // endregion
 
