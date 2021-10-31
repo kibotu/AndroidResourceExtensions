@@ -7,7 +7,7 @@ git:
 env:
   global:
 
-    - SLAVE_AAPT_TIMEOUT=30
+    - SLAVE_AAPT_TIMEOUT=31
     - TERM=dumb
     - GRADLE_OPTS="-XX:MaxPermSize=1024m -XX:+CMSClassUnloadingEnabled -XX:+HeapDumpOnOutOfMemoryError -Xmx2048m  -Dfile.encoding=UTF-8"
 
@@ -19,8 +19,8 @@ android:
 
     - platform-tools
     - tools
-    - build-tools-30.0.3
-    - android-30
+    - build-tools-31.0.0
+    - android-31
     - extra-google-m2repository
     - extra-android-m2repository
 
