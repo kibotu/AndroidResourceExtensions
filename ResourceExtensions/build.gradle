@@ -46,9 +46,6 @@ android {
         freeCompilerArgs += [
                 // disable linting for opt-in annotations
                 "-Xopt-in=kotlin.RequiresOptIn",
-                // disable compose version check
-                "-P",
-                "plugin:androidx.compose.compiler.plugins.kotlin:suppressKotlinVersionCompatibilityCheck=true"
         ]
     }
 
