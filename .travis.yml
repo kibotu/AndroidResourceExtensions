@@ -24,17 +24,16 @@ android:
 
   # https://docs.travis-ci.com/user/languages/android/
   licenses:
-    - 'android-sdk-preview-license-52d11cd2'
+    - 'android-sdk-preview-license-.+'
     - 'android-sdk-license-.+'
     - 'google-gdk-license-.+'
 
 before_install:
   - git submodule update --init --recursive
   - chmod u+x gradlew
-#  - android list sdk --no-ui --all --extended
-#  - android list targets
-#  - wget -r -nH -nd -np -R index.html* robots.txt* http://download.kiwix.org/dev/android/api/licenses/ -e robots=off -P $ANDROID_HOME/licenses || true
-#  - yes | sdkmanager "platforms;android-29"
+  - android list sdk --no-ui --all --extended
+  - android list targets
+  - yes | sdkmanager "platforms;android-31"
 
 install: true
 
@@ -46,3 +45,13 @@ after_failure: true
 
 notifications:
   email: false
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+    - $HOME/.android/build-cache
