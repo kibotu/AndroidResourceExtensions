@@ -1,6 +1,6 @@
 language: android
 dist: trusty
-jdk: oraclejdk11
+jdk: openjdk11
 
 env:
   global:
