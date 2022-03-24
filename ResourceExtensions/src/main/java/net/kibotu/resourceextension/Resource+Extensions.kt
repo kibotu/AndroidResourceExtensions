@@ -47,7 +47,7 @@ import java.util.*
 
 
 /**
- * Created by [Jan Rabe](https://about.me/janrabe).
+ * Created by [Jan Rabe](https://kibotu.net/).
  */
 
 internal inline val context: ContextWrapper

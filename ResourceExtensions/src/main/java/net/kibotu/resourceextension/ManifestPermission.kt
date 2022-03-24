@@ -1,3 +1,9 @@
+@file:Suppress("DEPRECATION")
+
+/**
+ * Created by [Jan Rabe](https://kibotu.net/).
+ */
+
 package net.kibotu.resourceextension
 
 import android.Manifest
@@ -9,7 +15,7 @@ import androidx.annotation.StringDef
 import androidx.core.app.ActivityCompat
 
 
-@TargetApi(Build.VERSION_CODES.S)
+@TargetApi(Build.VERSION_CODES.S_V2)
 @StringDef(
     value = [
         ACCEPT_HANDOVER,
@@ -104,6 +110,7 @@ import androidx.core.app.ActivityCompat
         INTERACT_ACROSS_PROFILES,
         INTERNET,
         KILL_BACKGROUND_PROCESSES,
+        LAUNCH_MULTI_PANE_SETTINGS_DEEP_LINK,
         LOADER_USAGE_STATS,
         LOCATION_HARDWARE,
         MANAGE_DOCUMENTS,
@@ -210,7 +217,8 @@ import androidx.core.app.ActivityCompat
 )
 annotation class Permission
 
-inline class ManifestPermission(@Permission val permission: String)
+@JvmInline
+value class ManifestPermission(@Permission val permission: String)
 
 /**
  * [Manifest.permission]
