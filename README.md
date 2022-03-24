@@ -213,7 +213,7 @@ Contributions welcome!
 ### License
 
 <pre>
-Copyright 2019 Jan Rabe
+Copyright 2022 Jan Rabe
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
