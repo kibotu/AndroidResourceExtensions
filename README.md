@@ -2,7 +2,7 @@
 
 
 # Android Resource Extensions 
-[![Build Status](https://app.travis-ci.com/kibotu/AndroidResourceExtensions.svg?branch=master)](https://app.travis-ci.com/kibotu/AndroidResourceExtensions) [![](https://jitpack.io/v/kibotu/AndroidResourceExtensions.svg)](https://jitpack.io/#kibotu/AndroidResourceExtensions) [![](https://jitpack.io/v/kibotu/AndroidResourceExtensions/month.svg)](https://jitpack.io/#kibotu/AndroidResourceExtensions) [![Hits-of-Code](https://hitsofcode.com/github/kibotu/AndroidResourceExtensions)](https://hitsofcode.com/view/github/kibotu/AndroidResourceExtensions) [![Javadoc](https://img.shields.io/badge/javadoc-SNAPSHOT-green.svg)](https://jitpack.io/com/github/kibotu/AndroidResourceExtensions/master-SNAPSHOT/javadoc/index.html) [![API](https://img.shields.io/badge/API-15%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=15) [![Gradle Version](https://img.shields.io/badge/gradle-7.4-green.svg)](https://docs.gradle.org/current/release-notes)  [![Kotlin](https://img.shields.io/badge/kotlin-1.6.10-green.svg)](https://kotlinlang.org/) [![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/kibotu/AndroidResourceExtensions/master/LICENSE) [![androidx](https://img.shields.io/badge/androidx-brightgreen.svg)](https://developer.android.com/topic/libraries/support-library/refactor)
+[![Build Status](https://app.travis-ci.com/kibotu/AndroidResourceExtensions.svg?branch=master)](https://app.travis-ci.com/kibotu/AndroidResourceExtensions) [![](https://jitpack.io/v/kibotu/AndroidResourceExtensions.svg)](https://jitpack.io/#kibotu/AndroidResourceExtensions) [![](https://jitpack.io/v/kibotu/AndroidResourceExtensions/month.svg)](https://jitpack.io/#kibotu/AndroidResourceExtensions) [![Hits-of-Code](https://hitsofcode.com/github/kibotu/AndroidResourceExtensions)](https://hitsofcode.com/view/github/kibotu/AndroidResourceExtensions) [![Javadoc](https://img.shields.io/badge/javadoc-SNAPSHOT-green.svg)](https://jitpack.io/com/github/kibotu/AndroidResourceExtensions/master-SNAPSHOT/javadoc/index.html) [![API](https://img.shields.io/badge/API-15%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=15) [![Gradle Version](https://img.shields.io/badge/gradle-7.5-green.svg)](https://docs.gradle.org/current/release-notes)  [![Kotlin](https://img.shields.io/badge/kotlin-1.7.10-green.svg)](https://kotlinlang.org/) [![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/kibotu/AndroidResourceExtensions/master/LICENSE) [![androidx](https://img.shields.io/badge/androidx-brightgreen.svg)](https://developer.android.com/topic/libraries/support-library/refactor)
 
 Convenience extension methods for android's auto-generated /res folder *R.* class.
 
@@ -197,7 +197,6 @@ allprojects {
 Step 2. Add the dependency
 ```groovy
 dependencies {
-    implementation "com.github.florent37:applicationprovider:1.0.0"
     implementation 'com.github.kibotu:AndroidResourceExtensions:{latest}'
 }
 ```
