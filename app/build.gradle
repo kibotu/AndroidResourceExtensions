@@ -2,13 +2,13 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 android {
-    compileSdkVersion 32
-    buildToolsVersion "32.0.0"
+    compileSdkVersion 33
+    buildToolsVersion "33.0.0"
 
     defaultConfig {
         applicationId "net.kibotu.resourceextensions.demo"
         minSdkVersion 15
-        targetSdkVersion 32
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -42,7 +42,7 @@ android {
         jvmTarget = "11"
         freeCompilerArgs += [
                 // disable linting for opt-in annotations
-                "-Xopt-in=kotlin.RequiresOptIn",
+                "-opt-in=kotlin.RequiresOptIn",
         ]
     }
 
@@ -74,5 +74,5 @@ dependencies {
     implementation 'com.google.android.material:material:1.4.0'
 
     implementation project(':ResourceExtensions')
-    implementation 'com.github.kibotu:ApplicationProvider:1.0.7'
+    implementation 'com.github.kibotu:ApplicationProvider:1.7.10'
 }

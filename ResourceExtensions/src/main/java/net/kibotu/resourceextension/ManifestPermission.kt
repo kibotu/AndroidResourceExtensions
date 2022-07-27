@@ -15,7 +15,7 @@ import androidx.annotation.StringDef
 import androidx.core.app.ActivityCompat
 
 
-@TargetApi(Build.VERSION_CODES.S_V2)
+@TargetApi(Build.VERSION_CODES.TIRAMISU)
 @StringDef(
     value = [
         ACCEPT_HANDOVER,
