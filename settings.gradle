@@ -1,2 +1,1 @@
-include ':app', ':ResourceExtensions'
-rootProject.name='AndroidResourceExtensions'
+include ':app', ':AndroidResourceExtensions'

@@ -1,17 +1,17 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-    namespace "net.kibotu.resourceextensions.demo"
+    namespace "net.kibotu.resourceextension"
     compileSdk compileSdkVer
     buildToolsVersion = buildToolsVer
 
     defaultConfig {
-        applicationId "net.kibotu.resourceextensions.demo"
         minSdk minSdkVer
         targetSdk targetSdkVer
-        versionName version
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles 'consumer-rules.pro'
     }
 
     buildTypes {
@@ -52,15 +52,48 @@ android {
     }
 
     // endregion
+
+    // region exclude duplicated meta inf files
+
+    packagingOptions {
+        // DebugProbesKt.bin is used for java debugging (not needed for android)
+        // Hint: https://github.com/Kotlin/kotlinx.coroutines/issues/2274
+        exclude 'DebugProbesKt.bin'
+
+        excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        // https://stackoverflow.com/a/61893957/1006741
+        excludes -= "/META-INF/*.kotlin_module"
+    }
+
+    // endregion
 }
 
 dependencies {
     coreLibraryDesugaring desugaring.jdk
     implementation libs.supportAppCompat
-    implementation libs.coreKtx
-    implementation libs.constraintLayout
-    implementation libs.material
-
-    implementation project(':AndroidResourceExtensions')
     implementation libs.applicationProvider
+}
+
+if (!isJitpack) {
+    apply plugin: 'com.vanniktech.maven.publish'
+    mavenPublishing {
+        publishToMavenCentral(com.vanniktech.maven.publish.SonatypeHost.CENTRAL_PORTAL, true)
+        signAllPublications()
+    }
+}
+
+if (isJitpack) {
+    apply plugin: 'maven-publish'
+    afterEvaluate {
+        publishing {
+            publications {
+                release(MavenPublication) {
+                    from components.release
+                    groupId = GROUP
+                    artifactId = POM_ARTIFACT_ID
+                    version = version
+                }
+            }
+        }
+    }
 }

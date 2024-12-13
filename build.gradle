@@ -1,18 +1,18 @@
 buildscript {
 
-    ext.kotlin_version = '1.7.10'
-    ext.libraryVersion = '1.7.10'
+    apply from: "./dependencies.gradle"
 
     repositories {
         google()
         mavenCentral()
-        maven { url "https://jitpack.io" }
-
+        gradlePluginPortal()
+        maven { url 'https://jitpack.io' }
     }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:7.2.1'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
+    dependencies {
+        classpath plugin.gradleBuildTools
+        classpath plugin.kotlinGradle
+        classpath plugin.mavenCentralPublish
     }
 }
 
@@ -20,10 +20,7 @@ allprojects {
     repositories {
         google()
         mavenCentral()
-        maven { url "https://jitpack.io" }
+        gradlePluginPortal()
+        maven { url 'https://jitpack.io' }
     }
-}
-
-task clean(type: Delete) {
-    delete rootProject.buildDir
 }

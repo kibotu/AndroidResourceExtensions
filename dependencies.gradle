@@ -1,0 +1,37 @@
+ext {
+    // refresh gradle dependencies: ./gradlew build --refresh-dependencies
+    minSdkVer = 21
+
+    compileSdkVer = 35
+    buildToolsVer = "35.0.0"
+    targetSdkVer = 35
+
+    // @see https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib-jdk8
+    kotlinVersion = "2.1.0"
+
+    isJitpack = System.getenv("JITPACK") == "true"
+
+    println "Compile Version: $compileSdkVer"
+    println "Min SDK Version: $minSdkVer"
+    println "Target SDK Version: $targetSdkVer"
+    println "Kotlin: $kotlinVersion"
+    println "Version Name: $version"
+}
+
+ext.plugin = [
+        mavenCentralPublish: "com.vanniktech:gradle-maven-publish-plugin:0.30.0",
+        gradleBuildTools   : "com.android.tools.build:gradle:8.7.3",
+        kotlinGradle       : "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion",
+]
+
+ext.libs = [
+        supportAppCompat   : "androidx.appcompat:appcompat:1.7.0",
+        coreKtx            : "androidx.core:core-ktx:1.7.0",
+        applicationProvider: "net.kibotu:ApplicationProvider:2.1.2",
+        constraintLayout   : "androidx.constraintlayout:constraintlayout:2.1.4",
+        material           : "com.google.android.material:material:1.12.0",
+]
+
+ext.desugaring = [
+        jdk: "com.android.tools:desugar_jdk_libs:2.1.3"
+]

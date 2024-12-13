@@ -8,7 +8,7 @@
     <string name="my_string_args_float" tools:ignore="MissingTranslation">lorem %.2f</string>
     <string name="my_localized_string">default</string>
 
-    <plurals name="my_quantityString">
+    <plurals name="my_quantityString" translatable="false">
         <item quantity="zero">Minutes</item>
         <item quantity="one">Minute</item>
         <item quantity="two">Minutes</item>
@@ -17,7 +17,7 @@
         <item quantity="other">Minutes</item>
     </plurals>
 
-    <plurals name="my_quantityString_args">
+    <plurals name="my_quantityString_args" translatable="false">
         <item quantity="zero">%s Minutes</item>
         <item quantity="one">%s Minute</item>
         <item quantity="two">%s Minutes</item>
