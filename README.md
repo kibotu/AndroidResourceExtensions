@@ -1,11 +1,43 @@
 [![Donation](https://img.shields.io/badge/buy%20me%20a%20coffee-brightgreen.svg)](https://www.paypal.me/janrabe/5) [![About Jan Rabe](https://img.shields.io/badge/about-me-green.svg)](https://kibotu.net) [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-AndroidResourceExtensions-brightgreen.svg?style=flat)](https://android-arsenal.com/details/1/7880)
 
 # Android Resource Extensions 
-[![Maven Central Version](https://img.shields.io/maven-central/v/net.kibotu/ApplicationProvider)](https://central.sonatype.com/artifact/net.kibotu/ApplicationProvider) [![](https://jitpack.io/v/kibotu/ApplicationProvider.svg)](https://jitpack.io/#kibotu/ApplicationProvider) [![Android CI](https://github.com/kibotu/ApplicationProvider/actions/workflows/android.yml/badge.svg)](https://github.com/kibotu/ApplicationProvider/actions/workflows/android.yml) [![API](https://img.shields.io/badge/Min%20API-21%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=21) [![API](https://img.shields.io/badge/Target%20API-35%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=35) [![API](https://img.shields.io/badge/Java-17-brightgreen.svg?style=flat)](https://www.oracle.com/java/technologies/javase/17all-relnotes.html) [![Gradle Version](https://img.shields.io/badge/gradle-8.11.1-green.svg)](https://docs.gradle.org/current/release-notes) [![Kotlin](https://img.shields.io/badge/kotlin-2.1.0-green.svg)](https://kotlinlang.org/) [![](https://jitpack.io/v/kibotu/AndroidResourceExtensions/month.svg)](https://jitpack.io/#kibotu/AndroidResourceExtensions) [![Hits-of-Code](https://hitsofcode.com/github/kibotu/AndroidResourceExtensions)](https://hitsofcode.com/view/github/kibotu/AndroidResourceExtensions)
+[![Maven Central Version](https://img.shields.io/maven-central/v/net.kibotu/AndroidResourceExtensions)](https://central.sonatype.com/artifact/net.kibotu/AndroidResourceExtensions) [![](https://jitpack.io/v/kibotu/AndroidResourceExtensions.svg)](https://jitpack.io/#kibotu/AndroidResourceExtensions) [![Android CI](https://github.com/kibotu/AndroidResourceExtensions/actions/workflows/android.yml/badge.svg)](https://github.com/kibotu/AndroidResourceExtensions/actions/workflows/android.yml) [![API](https://img.shields.io/badge/Min%20API-21%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=21) [![API](https://img.shields.io/badge/Target%20API-35%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=35) [![API](https://img.shields.io/badge/Java-17-brightgreen.svg?style=flat)](https://www.oracle.com/java/technologies/javase/17all-relnotes.html) [![Gradle Version](https://img.shields.io/badge/gradle-8.11.1-green.svg)](https://docs.gradle.org/current/release-notes) [![Kotlin](https://img.shields.io/badge/kotlin-2.1.0-green.svg)](https://kotlinlang.org/) [![](https://jitpack.io/v/kibotu/AndroidResourceExtensions/month.svg)](https://jitpack.io/#kibotu/AndroidResourceExtensions) [![Hits-of-Code](https://hitsofcode.com/github/kibotu/AndroidResourceExtensions)](https://hitsofcode.com/view/github/kibotu/AndroidResourceExtensions)
 
 Convenience extension methods for android's auto-generated /res folder *R.* class.
 
 Basically everything in your res/ and /assets folder can be accessed via an extension function. *Note: everything gets loaded with current activity context, if that is not available it uses application context.*
+
+# How to install
+
+## MavenCentral
+
+```groovy 
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}
+
+dependencies {
+    implementation 'net.kibotu:AndroidResourceExtensions:{latest-version}'
+}
+
+```
+
+## Jitpack
+
+```groovy
+allprojects {
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+dependencies {
+    implementation 'com.github.kibotu:AndroidResourceExtensions:{latest-version}'
+}
+```
 
 ### Features:
 
@@ -174,30 +206,6 @@ val my_string_is_a_mailto_link: Boolean = Uri.parse("""<a href="mailto:cloudgaze
 
 val locationPermission : Boolean = Manifest.permission.ACCESS_FINE_LOCATION.isGranted
 
-```
-
-###  How to install
-
-To get a Git project into your build:
-
-Step 1. Add the JitPack repository to your build file
-
-Add it in your root build.gradle at the end of repositories:
-
-```groovy
-allprojects {
-	repositories {
-		...
-		maven { url 'https://jitpack.io' }
-	}
-}
-``` 
-
-Step 2. Add the dependency
-```groovy
-dependencies {
-    implementation 'com.github.kibotu:AndroidResourceExtensions:{latest}'
-}
 ```
 
 ### Notes
